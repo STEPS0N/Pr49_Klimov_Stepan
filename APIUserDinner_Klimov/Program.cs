@@ -37,11 +37,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
-app.UseSwagger();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Запросы POST");

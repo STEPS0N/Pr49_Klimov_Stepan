@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace APIUserDinner_Klimov.Controllers
 {
-    [Route("dishes")]
+    [Route("api/dishes")]
     [ApiExplorerSettings(GroupName = "v2")]
     public class DishController : Controller
     {
@@ -19,7 +19,7 @@ namespace APIUserDinner_Klimov.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult GetVersions()
+        public ActionResult GetVersions()
         {
             DishContext context = new DishContext();
 
@@ -44,15 +44,45 @@ namespace APIUserDinner_Klimov.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult GetDishes([FromQuery] string version)
+        public ActionResult GetDishes([FromQuery] string version)
         {
             DishContext context = new DishContext();
 
             try
             {
-                var dishes = context.Dishes.Where(x => x.Version == version).First();
+                var dishes = context.Dishes.Where(x => x.Version == version).ToList();
 
                 return Ok(dishes);
+            }
+            catch
+            {
+                return StatusCode(400);
+            }
+        }
+
+        [ApiExplorerSettings(GroupName = "v1")]
+        /// <summary>
+        /// Отправить заказ
+        /// </summary>
+        /// <remarks>Данный метод осуществляет отправку заказа</remarks>
+        /// <response code="200">Заказ принят</response>
+        /// <response code="400">Проблемы при запросе</response>
+        /// <response code="401">Неавторизированный доступ</response>
+        [Route("order")]
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public ActionResult CreateOrder([FromBody] Order order)
+        {
+            DishContext context = new DishContext();
+
+            try
+            {
+                context.Orders.Add(order);
+                context.SaveChanges();
+
+                return StatusCode(200);
             }
             catch
             {
