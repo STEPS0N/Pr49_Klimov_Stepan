@@ -13,6 +13,13 @@ builder.Services.AddSwaggerGen(option =>
         Description = "Полное руководство для использования запросов находящихся в проекте"
     });
 
+    option.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "v2",
+        Title = "Руководство для использования запросов",
+        Description = "Полное руководство для использования запросов находящихся в проекте"
+    });
+
     String PathFile = Path.Combine(System.AppContext.BaseDirectory, "APIUserDinner_Klimov.xml");
     option.IncludeXmlComments(PathFile);
 });
@@ -38,6 +45,7 @@ app.UseEndpoints(endpoints =>
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Запросы POST");
+    c.SwaggerEndpoint("/swagger/v2/swagger.json", "Запросы GET");
 });
 app.UseAuthorization();
 
