@@ -34,5 +34,30 @@ namespace APIUserDinner_Klimov.Controllers
                 return StatusCode(400);
             }
         }
+
+        /// <summary>
+        /// Получить список блюд
+        /// </summary>
+        /// <remarks>Данный метод возвращает список блюд</remarks>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Проблемы при запросе</response>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public IActionResult GetDishes([FromQuery] string version)
+        {
+            DishContext context = new DishContext();
+
+            try
+            {
+                var dishes = context.Dishes.Where(x => x.Version == version).First();
+
+                return Ok(dishes);
+            }
+            catch
+            {
+                return StatusCode(400);
+            }
+        }
     }
 }
