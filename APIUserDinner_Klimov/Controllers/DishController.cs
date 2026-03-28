@@ -60,6 +60,39 @@ namespace APIUserDinner_Klimov.Controllers
             }
         }
 
+        /// <summary>
+        /// Получить историю
+        /// </summary>
+        /// <remarks>Данный метод осуществляет получение истории</remarks>
+        /// <response code="200">История получена</response>
+        /// <response code="400">Проблемы при запросе</response>
+        /// <response code="401">Неавторизированный доступ</response>
+        [Route("histories")]
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public ActionResult GetHistory()
+        {
+            DishContext context = new DishContext();
+
+            try
+            {
+                var history = context.Orders.Select(x => new
+                {
+                    x.Address,
+                    x.Date,
+                    x.Dishes
+                }).ToList();
+
+                return Ok(history);
+            }
+            catch
+            {
+                return StatusCode(400);
+            }
+        }
+
         [ApiExplorerSettings(GroupName = "v1")]
         /// <summary>
         /// Отправить заказ
