@@ -24,7 +24,7 @@ namespace APIUserDinner_Klimov.Controllers
 
         public ActionResult RegIn([FromBody] UserRegistrationDto userDto)
         {
-            UserContext userContext = new UserContext();
+            DishContext userContext = new DishContext();
 
             try
             {
@@ -68,7 +68,7 @@ namespace APIUserDinner_Klimov.Controllers
 
         public ActionResult LogIn([FromBody] UserLoginDto loginDto)
         {
-            UserContext userContext = new UserContext();
+            DishContext userContext = new DishContext();
 
             var user = userContext.User.FirstOrDefault(x => x.Email == loginDto.Email);
 
@@ -82,16 +82,10 @@ namespace APIUserDinner_Klimov.Controllers
                 return StatusCode(400);
             }
 
-            string token = HashUserId(user.Id);
+            string token = JwtToken.Generate(user);
+
             return Ok(new TokenGet { Token = token });
 
-        }
-        private string HashUserId(int id)
-        {
-            using var sha256 = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(id.ToString());
-            var hash = sha256.ComputeHash(bytes);
-            return Convert.ToBase64String(hash);
         }
     }
 

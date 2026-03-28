@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APIUserDinner_Klimov.Models
 {
@@ -9,11 +10,5 @@ namespace APIUserDinner_Klimov.Models
         public string Address { get; set; }
         public string Date { get; set; }
         public List<OrderDish> Dishes { get; set; }
-    }
-
-    public class OrderDish
-    {
-        public int DishId { get; set; }
-        public int Count { get; set; }
     }
 }

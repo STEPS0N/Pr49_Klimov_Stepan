@@ -44,13 +44,13 @@ namespace APIUserDinner_Klimov.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public ActionResult GetDishes([FromQuery] string version)
+        public ActionResult GetDishes()
         {
             DishContext context = new DishContext();
 
             try
             {
-                var dishes = context.Dishes.Where(x => x.Version == version).ToList();
+                var dishes = context.Dishes.ToList();
 
                 return Ok(dishes);
             }
