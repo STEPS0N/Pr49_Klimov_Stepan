@@ -72,13 +72,21 @@ namespace APIUserDinner_Klimov.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        public ActionResult GetHistory()
+        public ActionResult GetHistory([FromHeader] string token)
         {
             DishContext context = new DishContext();
 
             try
             {
-                var history = context.Orders.Select(x => new
+                int? userId = JwtToken.GetUserIdFromToken(token);
+
+                if (userId == null)
+                {
+                    return StatusCode(401);
+                }
+
+                var history = context.Orders.Where(x => x.UserId == userId)
+                    .Select(x => new
                 {
                     x.Address,
                     x.Date,
@@ -106,12 +114,21 @@ namespace APIUserDinner_Klimov.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        public ActionResult CreateOrder([FromBody] Order order)
+        public ActionResult CreateOrder([FromHeader] string token, [FromBody] Order order)
         {
             DishContext context = new DishContext();
 
             try
             {
+                int? userId = JwtToken.GetUserIdFromToken(token);
+
+                if (userId == null)
+                {
+                    return StatusCode(401);
+                }
+
+                order.UserId = userId.Value;
+
                 context.Orders.Add(order);
                 context.SaveChanges();
 

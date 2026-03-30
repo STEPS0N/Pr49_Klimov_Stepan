@@ -7,6 +7,7 @@ namespace APIUserDinner_Klimov.Models
     {
         [Key]
         public int OrderId { get; set; }
+        public int UserId { get; set; }
         public string Address { get; set; }
         public string Date { get; set; }
         public List<OrderDish> Dishes { get; set; }
